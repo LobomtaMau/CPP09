@@ -3,13 +3,13 @@
 int main(int argc, char** argv) {
     (void)argv;
     if (argc != 2) {
-        std::cerr << "Use: ./btc input_file\n";
+        std::cerr << "Use: ./btc input.txt\n";
         return EXIT_FAILURE;
     }
 
     BtcMap database;
-    loadData("input.txt", database);
-    // processTransactions(argv[1], db);
+    loadExchangeRate("data.csv", database);
+    doConvertion(argv[1], database);
 
     return EXIT_SUCCESS;
 }

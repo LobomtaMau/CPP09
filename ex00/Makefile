@@ -28,6 +28,6 @@ re: fclean all
 
 run:
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --track-fds=yes \
-	./btc
+	./btc input.txt
 
 .PHONY: all clean fclean re
