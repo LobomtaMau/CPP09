@@ -1,4 +1,4 @@
-NAME = rpn
+NAME = RPN
 
 SRC = main.cpp RPN.cpp
 
@@ -28,6 +28,6 @@ re: fclean all
 
 run:
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --track-fds=yes \
-	./rpn
+	./RPN "8 9 * 9 - 9 - 9 - 4 - 1 +"
 
 .PHONY: all clean fclean re

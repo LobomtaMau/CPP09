@@ -1,4 +1,4 @@
-NAME = pmergeme
+NAME = PmergeMe
 
 SRC = main.cpp PmergeMe.cpp
 
@@ -28,6 +28,6 @@ re: fclean all
 
 run:
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --track-fds=yes \
-	./pmergeme
+	./PmergeMe
 
 .PHONY: all clean fclean re

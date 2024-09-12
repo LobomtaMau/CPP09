@@ -1,8 +1,10 @@
 #include "BitcoinExchange.hpp"
 
-void loadExchangeRate(const std::string &filename, BtcMap &database) {
+void loadExchangeRate(const std::string &filename, BtcMap &database)
+{
     std::ifstream file(filename.c_str());
-    if (!file.is_open()) {
+    if (!file.is_open())
+    {
         std::cerr << "Error: could not read exchange rate file!\n";
         exit(EXIT_FAILURE);
     }
@@ -10,7 +12,8 @@ void loadExchangeRate(const std::string &filename, BtcMap &database) {
     std::string line;
     std::getline(file, line);
 
-    while (std::getline(file, line)) {
+    while (std::getline(file, line))
+    {
         std::stringstream ss(line);
         std::string date, exchangeRate;
 
@@ -22,7 +25,8 @@ void loadExchangeRate(const std::string &filename, BtcMap &database) {
 
         char *end;
         float rate = std::strtof(exchangeRate.c_str(), &end);
-        if (*end != '\0' || exchangeRate.empty()) {
+        if (*end != '\0' || exchangeRate.empty())
+        {
             std::cerr << "Error: invalid exchange rate -> " << exchangeRate << "\n";
             continue;
         }
@@ -31,7 +35,8 @@ void loadExchangeRate(const std::string &filename, BtcMap &database) {
     file.close();
 }
 
-bool ft_sToI(const std::string &str, int &result) {
+bool ft_sToI(const std::string &str, int &result)
+{
     std::stringstream ss(str);
     ss >> result;
     if (ss.fail() || !ss.eof()) {
@@ -72,9 +77,11 @@ bool validateDate(const std::string &date) {
     return true;
 }
 
-void doConvertion(const std::string &filename, const BtcMap &exchangeRates) {
+void doConvertion(const std::string &filename, const BtcMap &exchangeRates)
+{
     std::ifstream file(filename.c_str());
-    if (!file.is_open()) {
+    if (!file.is_open())
+    {
         std::cerr << "Error: could not read input file!\n";
         exit(EXIT_FAILURE);
     }
@@ -82,7 +89,8 @@ void doConvertion(const std::string &filename, const BtcMap &exchangeRates) {
     std::string line;
     std::getline(file, line);
 
-    while (std::getline(file, line)) {
+    while (std::getline(file, line))
+    {
         std::stringstream ss(line);
         std::string date, value;
 
@@ -92,14 +100,16 @@ void doConvertion(const std::string &filename, const BtcMap &exchangeRates) {
         date.erase(date.find_last_not_of(" \n\t\r") + 1);
         value.erase(0, value.find_first_not_of(" \n\t\r"));
 
-        if (!validateDate(date)) {
+        if (!validateDate(date))
+        {
             std::cerr << "Error: invalid date -> " << date << "\n";
             continue;
         }
 
         char *end;
         float btcQT = std::strtof(value.c_str(), &end);
-        if (btcQT < 0 || btcQT > 1000 || *end != '\0' || value.empty()) {
+        if (btcQT < 0 || btcQT > 1000 || *end != '\0' || value.empty())
+        {
             std::cerr << "Error: invalid value -> " << value << "\n";
             continue;
         }
