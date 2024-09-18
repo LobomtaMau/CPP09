@@ -4,7 +4,10 @@
 #include <iostream>
 #include <vector>
 #include <deque>
-#include <cstdlib>
+#include <ctime>
+#include <exception>
+#include <algorithm>
+#include <limits.h>
 
 class PmergeMe
 {
@@ -12,18 +15,32 @@ class PmergeMe
         PmergeMe();
         ~PmergeMe();
 
-        bool parsingArgs(int argc, char **argv, std::vector<int> &next);
-        void mergeSortVecDeq(std::vector<int> &container);
-        void mergeSortVecDeq(std::deque<int> &container);
+        void parseIN(int argc, char **argv);
+        void sortVec();
+        void sortDeq();
+        void displayTime();
+        
+        class PMException : public std::exception
+        {
+            private:
+                const char* _msg;
+            public:
+                explicit PMException(const char* message) : _msg(message) {}
 
-        template<typename Container>
-        void printSequence(const std::string &name, const Container &container);
-
-        double getTimeInMS()const;
+                virtual const char* what() const throw() {
+                    return _msg;
+                }
+        };
 
     private:
-        template<typename Container>
-        void merge(Container &container, Container &left, Container & right);
+        std::vector<int> _vec;
+        std::deque<int> _deq;
+        double _timeVec;
+        double _timeDeq;
+
+        void mergeInsertVec(std::vector<int> &vector);
+        void mergeInsertDeq(std::deque<int> &deque);
+        bool isValid(const std::string &str);
 
 };
 

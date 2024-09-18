@@ -9,19 +9,21 @@
 #include <exception>
 
 
-class RPN {
+class RPN
+{
     public:
         RPN(const std::string &equation);
         void checkEquation();
     
-        class RPNException : public std::exception {
+        class RPNException : public std::exception
+        {
             private:
-                const char* _message;
+                const char* _msg;
             public:
-                explicit RPNException(const char* message) : _message(message) {}
+                explicit RPNException(const char* message) : _msg(message) {}
 
                 virtual const char* what() const throw() {
-                    return _message;
+                    return _msg;
                 }
         };
 
