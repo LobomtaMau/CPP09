@@ -28,7 +28,7 @@ re: fclean all
 
 run:
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --track-fds=yes \
-	./PmergeMe $(shuf -i 1-100000 -n 300 | tr '\n' ' ')
+	./PmergeMe $(shell shuf -i 1-100000 -n 300 | tr '\n' ' ')
 
 
 .PHONY: all clean fclean re

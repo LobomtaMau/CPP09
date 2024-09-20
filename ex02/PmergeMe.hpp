@@ -41,7 +41,6 @@ class PmergeMe
         void mergeInsertVec(std::vector<int> &vector);
         void mergeInsertDeq(std::deque<int> &deque);
 
-        // std::deque<int> merge(const std::deque<int> &left, const std::deque<int> &right);
         bool isValid(const std::string &str);
 
 };
