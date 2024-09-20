@@ -2,8 +2,8 @@
 
 int main(int argc, char** argv) {
     try {
-        PmergeMe sorter;
-        sorter.parseIN(argc, argv);
+        PmergeMe test;
+        test.parseIN(argc, argv);
 
         std::cout << "Before: ";
         for (int i = 1; i < argc; ++i) {
@@ -11,10 +11,10 @@ int main(int argc, char** argv) {
         }
         std::cout << "\n";
 
-        sorter.sortVec();
-        sorter.sortDeq();
+        test.sortVec();
+        test.sortDeq();
 
-        sorter.displayTime();
+        test.displayTime();
     } catch (const std::exception& e) {
         std::cerr << e.what() << std::endl;
         return EXIT_FAILURE;

@@ -19,8 +19,8 @@ void PmergeMe::parseIN(int argc, char **argv)
             throw PMException("Error: invalid int!\n");
         }
 
-        _vec.push_back(static_cast<int>(nbr));
-        _deq.push_back(static_cast<int>(nbr));
+        _vec.push_back(nbr);
+        _deq.push_back(nbr);
     }
 }
 
@@ -55,15 +55,58 @@ void PmergeMe::displayTime()
     std::cout << "After Vector sort: ";
     for (size_t i = 0; i < _vec.size(); i++)
         std::cout << _vec[i] << " ";
-    std::cout << "\n";
+    std::cout << "\n\n";
 
     std::cout << "After Deque sort: ";
     for (size_t i = 0; i < _deq.size(); i++)
         std::cout << _deq[i] << " ";
-    std::cout << "\n";
+    std::cout << "\n\n";
 
-    std::cout << "Time with vector: " << _timeVec<< " mesc\n";
+    std::cout << "Time with vector: " << _timeVec<< " msec\n";
     std::cout << "Time with deque: " << _timeDeq << " msec\n";
+}
+
+void PmergeMe::mergeInsertVec(std::vector<int> &vector)
+{
+    if (vector.size() <= 1)
+        return;
+
+    std::vector<std::pair<int, int> > pairs;
+    for (size_t i = 0; i + 1 < vector.size(); i += 2)
+    {
+        if (vector[i] > vector[i + 1])
+            pairs.push_back(std::make_pair(vector[i + 1], vector[i]));
+        else
+            pairs.push_back(std::make_pair(vector[i], vector[i + 1]));
+    }
+
+    std::vector<int> odd;
+    if (vector.size() % 2 != 0)
+        odd.push_back(vector.back());
+
+    std::vector<int> sortedVec;
+    for (size_t i = 0; i < pairs.size(); ++i)
+    {
+        sortedVec.push_back(pairs[i].first);
+    }
+
+    mergeInsertVec(sortedVec);
+
+    for (size_t i = 0; i < pairs.size(); ++i)
+    {
+        int secondElem = pairs[i].second;
+        std::vector<int>::iterator it = std::lower_bound(sortedVec.begin(), sortedVec.end(), secondElem);
+        sortedVec.insert(it, secondElem);
+    }
+
+    if (!odd.empty())
+    {
+        int oddElem = odd.front();
+        std::vector<int>::iterator it = std::lower_bound(sortedVec.begin(), sortedVec.end(), oddElem);
+        sortedVec.insert(it, oddElem);
+    }
+
+    vector = sortedVec;
 }
 
 void PmergeMe::mergeInsertDeq(std::deque<int> &deque)
@@ -85,14 +128,12 @@ void PmergeMe::mergeInsertDeq(std::deque<int> &deque)
         odd.push_back(deque.back());
 
     std::deque<int> sortedDeq;
-    sortedDeq.push_back(pairs[0].first);
-    
-    for (size_t i = 1; i < pairs.size(); ++i)
+    for (size_t i = 0; i < pairs.size(); ++i)
     {
-        int firstElem = pairs[i].first;
-        std::deque<int>::iterator it = std::lower_bound(sortedDeq.begin(), sortedDeq.end(), firstElem);
-        sortedDeq.insert(it, firstElem);
+        sortedDeq.push_back(pairs[i].first);
     }
+
+    mergeInsertDeq(sortedDeq);
 
     for (size_t i = 0; i < pairs.size(); ++i)
     {
@@ -111,49 +152,39 @@ void PmergeMe::mergeInsertDeq(std::deque<int> &deque)
     deque = sortedDeq;
 }
 
-void PmergeMe::mergeInsertVec(std::vector<int> &vector) 
+
+/*std::deque<int> PmergeMe::merge(const std::deque<int> &left, const std::deque<int> &right)
 {
-    if (vector.size() <= 1)
-        return;
-    // std::sort(vector.begin(), vector.end());
-    std::vector<std::pair<int, int> >pairs;
-    for (size_t i = 0; i + 1 < vector.size(); i += 2)
+    std::deque<int> result;
+    std::size_t i = 0, j = 0;
+
+    while (i < left.size() && j < right.size())
     {
-        if(vector[i] > vector [i + 1])
-            pairs.push_back(std::make_pair(vector[i + 1], vector[i]));
+        if (left[i] <= right[j])
+            result.push_back(left[i++]);
         else
-            pairs.push_back(std::make_pair(vector[i], vector[i + 1]));
+            result.push_back(right[j++]);
     }
 
-    std::vector<int> odd;
-    if (vector.size() % 2 != 0)
-        odd.push_back(vector.back());
+    while (i < left.size())
+        result.push_back(left[i++]);
 
-    std::vector<int> sortedVec;
-    sortedVec.push_back(vector.back());
+    while (j < right.size())
+        result.push_back(right[j++]);
 
-    for (size_t i = 1; i < pairs.size(); ++i)
-    {
-        int firstElem = pairs[i].first;
-        std::vector<int>::iterator it = std::lower_bound(sortedVec.begin(), sortedVec.end(), firstElem);
-        sortedVec.insert(it,firstElem);
-    }
-
-    for (size_t i = 0; i < pairs.size(); ++i)
-    {
-        int secondElem = pairs[i].second;
-        std::vector<int>::iterator it = std::lower_bound(sortedVec.begin(), sortedVec.end(), secondElem);
-        sortedVec.insert(it, secondElem);
-    }
-
-    if (!odd.empty())
-    {
-        int oddElem = odd.front();
-        std::vector<int>::iterator it = std::lower_bound(sortedVec.begin(), sortedVec.end(), oddElem);
-        sortedVec.insert(it, oddElem);
-    }
-
-    vector = sortedVec;
-
+    return result;
 }
 
+void PmergeMe::mergeInsertDeq(std::deque<int> &deque)
+{
+    if (deque.size() <= 1)
+        return;
+
+    std::deque<int> left(deque.begin(), deque.begin() + deque.size() / 2);
+    std::deque<int> right(deque.begin() + deque.size() / 2, deque.end());
+
+    mergeInsertDeq(left);
+    mergeInsertDeq(right);
+
+    deque = merge(left, right);
+}*/
