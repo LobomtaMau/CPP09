@@ -27,7 +27,8 @@ int RPN::doOp(char op, int a, int b)
 
 void RPN::checkEquation()
 {
-    std::stack<int> operador;
+    std::stack<int, std::list<int> > operador;
+    // std::stack<int> operador;
     std::stringstream ss(equation);
     std::string tokens;
 

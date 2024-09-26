@@ -7,6 +7,7 @@
 #include <sstream>
 #include <cstdlib>
 #include <exception>
+#include <list>
 
 
 class RPN
@@ -32,6 +33,8 @@ class RPN
 
         bool isOp(char c) const;
         int doOp(char op, int a, int b);
+
+        std::list<int> operador;
 
 };
 
